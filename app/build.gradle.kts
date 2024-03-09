@@ -44,6 +44,11 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
 
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.androidx.lifecycle.runtime.ktx)
+
+    implementation(libs.androidx.activity.ktx)
+
     implementation(libs.material)
 
     // kotlin coroutines
@@ -55,9 +60,11 @@ dependencies {
 
     // retrofit
     implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
 
     // okhttp3
     implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging.interceptor)
 
     // hilt
     implementation(libs.hilt)

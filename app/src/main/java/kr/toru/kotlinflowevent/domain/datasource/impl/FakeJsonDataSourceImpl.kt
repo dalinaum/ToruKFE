@@ -3,11 +3,12 @@ package kr.toru.kotlinflowevent.domain.datasource.impl
 import kr.toru.kotlinflowevent.domain.datasource.FakeJsonDataSource
 import kr.toru.kotlinflowevent.domain.model.PostDTO
 import kr.toru.kotlinflowevent.domain.network.FakeJsonService
-import kr.toru.kotlinflowevent.domain.network.Network
+import javax.inject.Inject
 
-class FakeJsonDataSourceImpl: FakeJsonDataSource {
+class FakeJsonDataSourceImpl @Inject constructor(
+    private val fakeJsonService: FakeJsonService
+): FakeJsonDataSource {
     override suspend fun getPost(): List<PostDTO> {
-        return Network.initRetrofit().create(FakeJsonService::class.java)
-            .getPost()
+        return fakeJsonService.getPost()
     }
 }

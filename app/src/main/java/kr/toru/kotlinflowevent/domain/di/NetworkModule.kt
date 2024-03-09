@@ -2,13 +2,17 @@ package kr.toru.kotlinflowevent.domain.di
 
 import dagger.Module
 import dagger.Provides
-import okhttp3.Interceptor
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetworkModule {
+@InstallIn(SingletonComponent::class)
+internal object NetworkModule {
 
     @Provides
     @Singleton
@@ -16,6 +20,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com")
             .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
     }
@@ -25,12 +30,16 @@ class NetworkModule {
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(
-                Interceptor { chain ->
+                interceptor = { chain ->
                     val request = chain.request()
                     val response = chain.proceed(request)
                     response
                 }
             )
+            .addNetworkInterceptor(
+                interceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
     }
 }
