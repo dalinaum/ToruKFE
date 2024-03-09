@@ -9,6 +9,9 @@ class FakeJsonRepositoryImpl @Inject constructor(
     private val dataSource: FakeJsonDataSource
 ): FakeJsonRepository {
     override suspend fun getPost(): List<PostDTO> {
-        return dataSource.getPost()
+        val result = dataSource.getPost()
+        result.isSuccess.let {
+            return result.getOrNull() ?: emptyList()
+        }
     }
 }

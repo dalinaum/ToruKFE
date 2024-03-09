@@ -17,7 +17,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val post = repository.getPost()
             Log.e("Toru", "length: ${post.size}")
-
         }
     }
 }
