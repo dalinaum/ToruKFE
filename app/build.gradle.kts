@@ -39,9 +39,16 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.ktx)
+
     implementation(libs.material)
+
+    // kotlin coroutines
+    implementation(libs.coroutines)
+    implementation(libs.coroutines.android)
 
     // gson
     implementation(libs.gson)
@@ -54,8 +61,6 @@ dependencies {
 
     // hilt
     implementation(libs.hilt)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
