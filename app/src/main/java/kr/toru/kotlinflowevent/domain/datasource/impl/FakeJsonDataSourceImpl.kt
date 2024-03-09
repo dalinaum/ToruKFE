@@ -9,18 +9,23 @@ import javax.inject.Inject
 class FakeJsonDataSourceImpl @Inject constructor(
     private val fakeJsonService: FakeJsonService
 ): FakeJsonDataSource {
-    override suspend fun getPost(): Result<List<PostDTO>> {
+    override suspend fun getPost(): ApiResponse<List<PostDTO>> {
         try {
             val postResponse = fakeJsonService.getPost()
             if (postResponse.code() == HTTP_OK) {
                 postResponse.body()?.let {
-                    return Result.success(it)
+                    return ApiResponse.Success(it)
                 }
             }
-            return Result.failure(exception = Exception("Failed to get post"))
+            return ApiResponse.Failure(exception = Exception("HTTP FAILED"))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure(exception = e)
+            return ApiResponse.Failure(exception = e)
         }
     }
+}
+
+sealed class ApiResponse<T> {
+    data class Success<T>(val data: T): ApiResponse<T>()
+    data class Failure<T>(val exception: Exception): ApiResponse<T>()
 }
