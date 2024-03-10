@@ -9,7 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+// 안쓰는 import 제거
+// import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.toru.kotlinflowevent.R
@@ -17,14 +18,15 @@ import kr.toru.kotlinflowevent.presentation.viewmodel.Event
 import kr.toru.kotlinflowevent.presentation.viewmodel.MainViewModel
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        // 단순히 setContentView하는 것이면 AppCompatActivity 생성자에 넣는게 좋을 듯.
+//        setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,24 +34,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.start()
-            viewModel.eventFlow.collectLatest { event ->
-                onHandleEvent(event)
+            // 둘을 분리할 필요가 없는 듯.
+//            viewModel.start()
+//            viewModel.eventFlow.collectLatest { event ->
+            viewModel.getEvents().collectLatest {
+                onHandleEvent(it)
+//                onHandleEvent(event)
             }
-
         }
     }
 
     private fun onHandleEvent(event: Event) {
         when(event) {
-            is Event.Loading -> {
+            Event.Loading -> { // Object는 is 비교 필요없음.
                 Log.e("Toru", "OnHandleEvent: Loading")
             }
             is Event.LoadedList -> {
                 // do something
                 Log.e("Toru", "OnHandleEvent: Loaded with List")
             }
-            is Event.EmptyList -> {
+            Event.EmptyList -> { // Object는 is 비교 필요 없음.
                 // do something
                 Log.e("Toru", "OnHandleEvent: Empty List")
             }

@@ -20,7 +20,8 @@ internal object NetworkModule {
         return Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com")
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create()) // 이것도 주입해도 될 것 같음.
+
             .build()
 
     }
@@ -34,7 +35,7 @@ internal object NetworkModule {
                     val request = chain.request()
                     val response = chain.proceed(request)
                     response
-                }
+                } // 아무 것도 하지 않는것? 역할이 없으면 빼는게 좋을 듯.
             )
             .addNetworkInterceptor(
                 interceptor = HttpLoggingInterceptor().apply {

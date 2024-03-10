@@ -19,6 +19,8 @@ class FakeJsonDataSourceImpl @Inject constructor(
                     return ApiResponse.Success(it)
                 }
             }
+            // 코드가 잘못되거나 바디가 잘못될 수 있으면 그 메시지를 예외에 넘겨줄 수 있으면 좋을 듯.
+            // 지금으로서는 디버깅에 크게 도움이 안될 것 같음.
             return ApiResponse.Failure(exception = HTTPFailedException())
         } catch (e: Exception) {
             e.printStackTrace()
